@@ -9,7 +9,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.Socket;
 
-public class SocketServer implements  Runnable{
+public class SocketServer implements Runnable {
     private final Socket socket;
     private final InputStream inputStream;
     private final OutputStream outputStream;
