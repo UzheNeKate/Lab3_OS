@@ -1,6 +1,6 @@
 package server;
 
-import request.WeatherController;
+import request.WeatherRequestHandler;
 
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -13,7 +13,7 @@ public class Main {
             while (true) {
                 Socket socket = serverSocket.accept();
                 var server = new SocketServer(socket);
-                server.setGetProcessor(new WeatherController());
+                server.setGetProcessor(new WeatherRequestHandler());
                 server.run();
             }
         } catch (Throwable e) {

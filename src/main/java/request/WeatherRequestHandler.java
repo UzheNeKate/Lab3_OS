@@ -5,12 +5,12 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 
-public class WeatherController implements RequestProcessor {
+public class WeatherRequestHandler implements RequestHandler {
     private final static String API_URL_FORMAT = System.getenv("API_URL_FORMAT");
     private final static String ACCESS_KEY = System.getenv("ACCESS_KEY");
 
     @Override
-    public String process(String request) {
+    public String handle(String request) {
         String weatherRequestFormat = "/weather?city=";
         if (request.startsWith(weatherRequestFormat)) {
             var city = request.substring(weatherRequestFormat.length());
@@ -22,7 +22,7 @@ public class WeatherController implements RequestProcessor {
                 return "200 OK " + new String(con.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
             } catch (IOException e) {
                 e.printStackTrace();
-                return "400 Bad Request";
+                return new UndefinedRequestHandler().handle(request);
             }
         } else {
             return "400 Bad Request";

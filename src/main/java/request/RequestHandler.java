@@ -1,10 +1,10 @@
 package request;
 
-public interface RequestProcessor {
+public interface RequestHandler {
 
     /**
      * @param request string containing request
      * @return string with response
      */
-    String process(String request);
+    String handle(String request);
 }
