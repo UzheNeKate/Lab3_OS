@@ -1,13 +1,17 @@
 package parser;
 
+import Data.WeatherInfo;
+import com.google.gson.Gson;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class JsonParser {
 
     //возвращает значение по ключу
-    String getField(String json, String field){
-        //TODO: create
+    public String getField(String json, String field){
+        Gson gson = new Gson();
+        WeatherInfo weather = gson.fromJson( json, WeatherInfo.class );
         return null;
     }
 
