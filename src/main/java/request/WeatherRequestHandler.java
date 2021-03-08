@@ -5,12 +5,12 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 
-public class GetWeatherProcessor implements RequestProcessor{
+public class WeatherRequestHandler implements RequestHandler {
     private final static String API_URL_FORMAT = System.getenv("API_URL_FORMAT");
     private final static String ACCESS_KEY = System.getenv("ACCESS_KEY");
 
     @Override
-    public String process(String request) {
+    public String handle(String request) {
         String weatherRequestFormat = "/weather?city=";
         if (request.startsWith(weatherRequestFormat)) {
             var city = request.substring(weatherRequestFormat.length());
@@ -19,13 +19,13 @@ public class GetWeatherProcessor implements RequestProcessor{
                 URL url = new URL(String.format(API_URL_FORMAT, ACCESS_KEY, city));
                 con = (HttpURLConnection) url.openConnection();
                 con.setRequestMethod(Request.GET.toString());
-                return new String(con.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
+                return "200 OK " + new String(con.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
             } catch (IOException e) {
                 e.printStackTrace();
-                return "Wrong request";
+                return new UndefinedRequestHandler().handle(request);
             }
         } else {
-            return "Wrong request";
+            return "400 Bad Request";
         }
     }
 }
