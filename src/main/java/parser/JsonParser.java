@@ -1,12 +1,20 @@
 package parser;
 
 import com.google.gson.Gson;
+
 import java.lang.reflect.Type;
 
+
 public class JsonParser<T> {
-    public T getFromJson(String json, Type type){
+    private final Type parsingClass;
+
+    public JsonParser(Type parsingClass) {
+        this.parsingClass = parsingClass;
+    }
+
+    public T getFromJson(String json){
         Gson gson = new Gson();
-        return gson.fromJson(json, type);
+        return gson.fromJson(json, parsingClass);
     }
 
     public String getJson(T obj){
