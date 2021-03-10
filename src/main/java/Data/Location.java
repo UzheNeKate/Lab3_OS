@@ -1,7 +1,5 @@
 package Data;
 
-import lombok.*;
-
 public class Location {
     String name;
     String country;
