@@ -1,31 +1,16 @@
 package parser;
 
-import Data.WeatherInfo;
 import com.google.gson.Gson;
+import java.lang.reflect.Type;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class JsonParser {
-
-    //возвращает значение по ключу
-    public String getField(String json, String field){
+public class JsonParser<T> {
+    public T getFromJson(String json, Type type){
         Gson gson = new Gson();
-        WeatherInfo weather = gson.fromJson( json, WeatherInfo.class );
-        return null;
+        return gson.fromJson(json, type);
     }
 
-    //возвращает массив значений по массиву ключей
-    List<String> getFields(String json, List<String> fields){
-        var jsonValues = new ArrayList<String>();
-        for (var field : fields){
-            jsonValues.add(getField(json, field));
-        }
-        return jsonValues;
-    }
-
-    String getJson(List<String> keys, List<String> values){
-        //TODO: create
-        return null;
+    public String getJson(T obj){
+        Gson gson = new Gson();
+        return gson.toJson(obj);
     }
 }
