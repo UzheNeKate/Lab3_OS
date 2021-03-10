@@ -1,6 +1,4 @@
-package Data;
-
-import java.util.Date;
+package data;
 
 public class Weather{
 

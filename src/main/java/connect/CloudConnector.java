@@ -1,7 +1,8 @@
-package request;
+package connect;
 
-import Data.AbstractWeatherInfo;
+import data.AbstractWeatherInfo;
 import parser.JsonParser;
+import request.RequestType;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
@@ -23,7 +24,7 @@ public class CloudConnector<T extends AbstractWeatherInfo> {
         try {
             URL url = new URL(String.format(API_URL_FORMAT, ACCESS_KEY, city));
             con = (HttpURLConnection) url.openConnection();
-            con.setRequestMethod(Request.GET.toString());
+            con.setRequestMethod(RequestType.GET.toString());
             JsonParser<T> parser = new JsonParser<>(type);
             T info = parser.getFromJson(new String(con.getInputStream().readAllBytes(), StandardCharsets.UTF_8));
             return new HttpConnectionInfo(200,  " OK ", info);

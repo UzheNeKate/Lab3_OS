@@ -1,5 +1,5 @@
 package request;
 
-public enum  Request {
+public enum RequestType {
     GET, POST, PUT, HEAD, DELETE, PATCH, OPTIONS
 }
