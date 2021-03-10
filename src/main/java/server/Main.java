@@ -13,7 +13,7 @@ public class Main {
             while (true) {
                 Socket socket = serverSocket.accept();
                 var server = new SocketServer(socket);
-                server.setGetProcessor(new WeatherRequestHandler());
+                System.out.println("Connected " + socket);
                 server.run();
             }
         } catch (Throwable e) {

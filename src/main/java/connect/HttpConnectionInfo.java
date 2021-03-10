@@ -1,6 +1,6 @@
-package request;
+package connect;
 
-import Data.AbstractWeatherInfo;
+import data.AbstractWeatherInfo;
 
 public class HttpConnectionInfo {
     final private int code;
