@@ -11,6 +11,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class SocketServer implements Runnable {
     private final Socket socket;
@@ -33,6 +35,7 @@ public class SocketServer implements Runnable {
         }
     }
 
+    static ExecutorService pool = Executors.newFixedThreadPool(16);
 
     private void readInput() throws Throwable {
         BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
@@ -45,7 +48,7 @@ public class SocketServer implements Runnable {
             if (handler == null) {
                 writeResponse(new JsonParser<Request>(Request.class).getJson(parsed));
             } else {
-                writeResponse(handler.call());
+                writeResponse(pool.submit(handler).get());
             }
         }
     }

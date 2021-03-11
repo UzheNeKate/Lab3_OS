@@ -2,11 +2,8 @@ package server;
 
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class Main {
-    static ExecutorService pool = Executors.newFixedThreadPool(8);
 
     public static void main(String[] args) {
         ServerSocket serverSocket;
@@ -15,7 +12,7 @@ public class Main {
             while (!serverSocket.isClosed()) {
                 Socket socket = serverSocket.accept();
                 var server = new SocketServer(socket);
-                pool.submit(server);
+                server.run();
             }
         } catch (Throwable e) {
             e.printStackTrace();
