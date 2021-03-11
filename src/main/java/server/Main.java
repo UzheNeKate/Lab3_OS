@@ -1,7 +1,5 @@
 package server;
 
-import request.WeatherRequestHandler;
-
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -13,7 +11,6 @@ public class Main {
             while (true) {
                 Socket socket = serverSocket.accept();
                 var server = new SocketServer(socket);
-                System.out.println("Connected " + socket);
                 server.run();
             }
         } catch (Throwable e) {

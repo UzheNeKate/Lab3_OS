@@ -1,11 +1,10 @@
 package server;
 
 import data.Request;
+import parser.JsonParser;
 import parser.RequestParser;
 import parser.ResponseHeader;
 import request.RequestDistributor;
-import request.RequestType;
-import request.RequestHandler;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -14,7 +13,6 @@ import java.io.OutputStream;
 import java.net.Socket;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.function.Function;
 
 public class SocketServer implements Runnable {
     private final Socket socket;
@@ -47,7 +45,7 @@ public class SocketServer implements Runnable {
             RequestDistributor distributor = new RequestDistributor();
             var handler = distributor.findHandler(parsed);
             if (handler == null){
-                writeResponse(parsed.getRequest());
+                writeResponse(new JsonParser<Request>(Request.class).getJson(parsed));
             } else {
                 writeResponse(pool.submit(handler).get());
             }
@@ -58,7 +56,7 @@ public class SocketServer implements Runnable {
     private void writeResponse(String responseData) throws Throwable {
         var responseHeader = new ResponseHeader("HTTP/1.1", "200 OK",
                 "WeatherServer/2009-09-09", "text/html", responseData.length(), "close");
-        outputStream.write((responseHeader + responseData).getBytes());
+        outputStream.write((responseHeader.toString() + responseData).getBytes());
         outputStream.flush();
     }
 

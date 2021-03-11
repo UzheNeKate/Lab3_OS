@@ -1,11 +1,9 @@
 package request;
 
 import data.Request;
-import parser.RequestParser;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.concurrent.Callable;
-import java.util.function.Function;
 
 public class RequestDistributor {
     public Callable<String> findHandler(Request parsedRequest) {

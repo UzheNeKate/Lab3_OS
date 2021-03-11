@@ -22,13 +22,16 @@ public class WeatherCache<T extends AbstractWeatherInfo> {
     }
 
     public T get(String key) throws ConnectionFailedException {
-        while (weatherByCity.get(key) == null) {
-            update(key);
+        if (weatherByCity.get(key) == null) {
+            return update(key);
         }
-        return weatherByCity.get(key);
+
+        var info = weatherByCity.get(key);
+        info.setWrittenToCache();
+        return info;
     }
 
-    private void update(String key) throws ConnectionFailedException {
+    private T update(String key) throws ConnectionFailedException {
         var connectionInfo = cloudConnector.getFromCloud(key);
 
         if (connectionInfo == null) {
@@ -40,11 +43,14 @@ public class WeatherCache<T extends AbstractWeatherInfo> {
 
         var data = (T)connectionInfo.getWeatherInfo();
         if (recordsQueue.size() == size) {
-            recordsQueue.poll();
-            weatherByCity.remove(key);
+            var removed = recordsQueue.poll();
+            if (removed != null) {
+                weatherByCity.remove(removed.getLocation().getName());
+            }
         }
 
         recordsQueue.add(data);
         weatherByCity.put(key, data);
+        return data;
     }
 }
