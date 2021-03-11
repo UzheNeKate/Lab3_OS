@@ -2,6 +2,7 @@ package server;
 
 import data.Request;
 import parser.RequestParser;
+import parser.ResponseHeader;
 import request.RequestDistributor;
 import request.RequestType;
 import request.RequestHandler;
@@ -20,15 +21,6 @@ public class SocketServer implements Runnable {
     private final InputStream inputStream;
     private final OutputStream outputStream;
 
-    //TODO: move to ResponseParser
-    String DEFAULT_RESPONSE_FORMAT = """
-            HTTP/1.1 200 OK\r
-            Server: YarServer/2009-09-09\r
-            Content-Type: text/html\r
-            Content-Length: %d\r
-            Connection: close\r
-            \r
-            """;
 
     public SocketServer(Socket socket) throws Throwable {
         this.socket = socket;
@@ -64,7 +56,8 @@ public class SocketServer implements Runnable {
 
 
     private void writeResponse(String responseData) throws Throwable {
-        var responseHeader = String.format(DEFAULT_RESPONSE_FORMAT, responseData.length());
+        var responseHeader = new ResponseHeader("HTTP/1.1", "200 OK",
+                "WeatherServer/2009-09-09", "text/html", responseData.length(), "close");
         outputStream.write((responseHeader + responseData).getBytes());
         outputStream.flush();
     }
