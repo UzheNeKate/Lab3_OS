@@ -1,23 +1,24 @@
 package request;
 
-import data.HumidityInfo;
+import com.google.gson.Gson;
+import data.HumidityRequestInfo;
 import data.WeatherCache;
-import connect.ConnectionFailedException;
-import parser.JsonParser;
+
+import java.net.ConnectException;
 
 public class HumidityRequestHandler implements RequestHandler {
 
-    static WeatherCache<HumidityInfo> cache = new WeatherCache<>(HumidityInfo.class, 5);
+    static WeatherCache cache = new WeatherCache(HumidityRequestInfo.class, 5);
 
     @Override
     public String handle(String city) {
-        HumidityInfo info;
+        HumidityRequestInfo info;
         try {
-            info = cache.get(city);
-        } catch (ConnectionFailedException e) {
+            info = new HumidityRequestInfo(cache.get(city));
+        } catch (ConnectException e) {
             return e.getMessage();
         }
-        JsonParser<HumidityInfo> parser = new JsonParser<>(HumidityInfo.class);
-        return parser.getJson(info);
+        Gson parser = new Gson();
+        return parser.toJson(info, HumidityRequestInfo.class);
     }
 }

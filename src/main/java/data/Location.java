@@ -11,4 +11,9 @@ public class Location {
     public String getCountry() {
         return country;
     }
+
+    public Location(Location location){
+        this.name = location.getName();
+        this.country = location.getCountry();
+    }
 }

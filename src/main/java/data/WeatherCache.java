@@ -1,27 +1,27 @@
 package data;
 
 import connect.CloudConnector;
-import connect.ConnectionFailedException;
 
 import java.lang.reflect.Type;
+import java.net.ConnectException;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-public class WeatherCache<T extends AbstractWeatherInfo> {
+public class WeatherCache {
     private final int size;
-    private final ConcurrentLinkedQueue<T> recordsQueue = new ConcurrentLinkedQueue<>();
-    private final ConcurrentHashMap<String, T> weatherByCity = new ConcurrentHashMap<>();
-    private final CloudConnector<T> cloudConnector;
+    private final ConcurrentLinkedQueue<CachedWeatherInfo> recordsQueue = new ConcurrentLinkedQueue<>();
+    private final ConcurrentHashMap<String, CachedWeatherInfo> weatherByCity = new ConcurrentHashMap<>();
+    private final CloudConnector cloudConnector;
 
     public WeatherCache(Type type, int size) {
-        this.cloudConnector = new CloudConnector<>(type);
+        this.cloudConnector = new CloudConnector();
         if (size < 0) {
             throw new IllegalArgumentException("Size cannot be negative");
         }
         this.size = size;
     }
 
-    public T get(String key) throws ConnectionFailedException {
+    public CachedWeatherInfo get(String key) throws ConnectException {
         if (weatherByCity.get(key) == null) {
             return update(key);
         }
@@ -31,26 +31,22 @@ public class WeatherCache<T extends AbstractWeatherInfo> {
         return info;
     }
 
-    private T update(String key) throws ConnectionFailedException {
-        var connectionInfo = cloudConnector.getFromCloud(key);
+    private CachedWeatherInfo update(String key) throws ConnectException {
+        var receivedOptionalInfo = cloudConnector.getFromCloud(key);
 
-        if (connectionInfo == null) {
-            throw new ConnectionFailedException(404, "Not Found");
-        }
-        if (connectionInfo.getWeatherInfo() == null) {
-            throw new ConnectionFailedException(connectionInfo.getCode(), connectionInfo.getMessage());
+        if (receivedOptionalInfo.isEmpty()) {
+            throw new ConnectException("400 Bad Request");
         }
 
-        var data = (T)connectionInfo.getWeatherInfo();
+        var receivedInfo = receivedOptionalInfo.get();
         if (recordsQueue.size() == size) {
             var removed = recordsQueue.poll();
             if (removed != null) {
                 weatherByCity.remove(removed.getLocation().getName());
             }
         }
-
-        recordsQueue.add(data);
-        weatherByCity.put(key, data);
-        return data;
+        recordsQueue.add(receivedInfo);
+        weatherByCity.put(key, receivedInfo);
+        return receivedInfo;
     }
 }

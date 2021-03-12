@@ -3,8 +3,9 @@ package parser;
 import data.Request;
 import request.RequestType;
 
+import static data.Request.BAD_REQUEST;
+
 public class RequestParser {
-    private static final Request BAD_REQUEST = new Request(RequestType.GET, "400 Bad Request", null);
 
     public static Request parse(String request) {
         if (request == null || request.trim().length() == 0) {

@@ -1,14 +1,14 @@
 package data;
 
-public class Humidity{
+public class Humidity extends AbstractWeather{
     int humidity;
-    String observation_time;
+
+    public Humidity(CachedWeather current) {
+        this.humidity = current.getHumidity();
+        this.observation_time = current.getObservationTime();
+    }
 
     public int getHumidity() {
         return humidity;
-    }
-
-    public String getObservationTime() {
-        return observation_time;
     }
 }

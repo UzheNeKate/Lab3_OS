@@ -1,7 +1,6 @@
 package data;
 
 public abstract class AbstractWeatherInfo {
-
     Location location;
     boolean fromCache = false;
 
@@ -9,12 +8,13 @@ public abstract class AbstractWeatherInfo {
         return location;
     }
 
-    public boolean getFromCache(){
+    public boolean getFromCache() {
         return fromCache;
     }
 
-    public void setWrittenToCache(){
+    public void setWrittenToCache() {
         fromCache = true;
     }
-}
 
+
+}

@@ -1,16 +1,11 @@
 package data;
 
-public class Weather{
-
-    String observation_time;
+public class CachedWeather extends AbstractWeather {
     int temperature;
     int feelslike;
     int visibility;
     int wind_speed;
-
-    public String getObservationTime() {
-        return observation_time;
-    }
+    int humidity;
 
     public int getTemperature() {
         return temperature;
@@ -26,5 +21,9 @@ public class Weather{
 
     public int getWindSpeed() {
         return wind_speed;
+    }
+
+    public int getHumidity() {
+        return humidity;
     }
 }

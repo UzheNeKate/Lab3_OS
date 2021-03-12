@@ -2,13 +2,13 @@ package parser;
 
 public class ResponseHeader {
     String httpStandard;
-    String httpCode;
+    int httpCode;
     String serverName;
     String contentType;
     int contentLength;
     String connection;
 
-    public ResponseHeader(String httpStandard, String httpCode, String serverName,
+    public ResponseHeader(String httpStandard, int httpCode, String serverName,
                           String contentType, int contentLength, String connection) {
         this.httpStandard = httpStandard;
         this.httpCode = httpCode;
@@ -21,7 +21,7 @@ public class ResponseHeader {
     @Override
     public String toString() {
         return String.format("""
-            %s %s\r
+            %s %d\r
             Server: %s\r
             Content-Type: %s\r
             Content-Length: %d\r
