@@ -38,8 +38,8 @@ class WeatherServerLauncherTest {
 
     static String getRandomRequest(){
         Random rnd = new Random();
-        return String.format("%s?city=%s", requests[rnd.nextInt(requests.length - 1)],
-                cities[rnd.nextInt(cities.length - 1)]);
+        return String.format("%s?city=%s", requests[rnd.nextInt(requests.length)],
+                cities[rnd.nextInt(cities.length)]);
     }
 
     @Test
@@ -60,11 +60,13 @@ class WeatherServerLauncherTest {
                 System.out.println("Request : " + randomRequest);
                 writer.println("GET /" + randomRequest);
             }
-
+            //socket.getInputStream().close();
             BufferedReader reader = new BufferedReader(new InputStreamReader(input));
             while ((line = reader.readLine()) != null) {
                 System.out.println(line);
             }
+            socket.getOutputStream().close();
+            reader.close();
 
         } catch (UnknownHostException ex) {
             System.out.println("Server not found: " + ex.getMessage());

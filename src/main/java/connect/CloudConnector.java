@@ -12,6 +12,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.nio.charset.StandardCharsets;
 import java.util.Optional;
+import java.util.concurrent.ExecutionException;
 
 public class CloudConnector {
     private final static String API_URL_FORMAT = "http://api.weatherstack.com/current?access_key=%s&query=%s";
@@ -24,13 +25,12 @@ public class CloudConnector {
             var request = HttpRequest.newBuilder(URI
                     .create(String.format(API_URL_FORMAT, ACCESS_KEY, city)))
                     .build();
-
             var response =
-                    client.send(request, new JsonBodyHandler<>(CachedWeatherInfo.class)).body().get();
+                    client.sendAsync(request, new JsonBodyHandler<>(CachedWeatherInfo.class)).get().body().get();
             Gson parser = new Gson();
             System.out.println(parser.toJson(response, CachedWeatherInfo.class));
             return Optional.of(response);
-        } catch (IOException | InterruptedException | NullPointerException e) {
+        } catch (InterruptedException | NullPointerException | ExecutionException e) {
             e.printStackTrace();
             return Optional.empty();
         }

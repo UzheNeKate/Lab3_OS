@@ -2,6 +2,7 @@ package server;
 
 import com.google.gson.Gson;
 import com.google.gson.internal.bind.util.ISO8601Utils;
+import data.CachedWeatherInfo;
 import data.Request;
 import parser.RequestParser;
 import parser.ResponseHeader;
@@ -59,10 +60,11 @@ public class SocketServer implements Runnable {
 
     private void writeResponse(String responseData, int httpCode) throws Throwable { ;
         var responseHeader = new ResponseHeader("HTTP/1.1", httpCode,
-                "WeatherServer", "text/html", responseData.length(), "keep-alive");
+                "WeatherServer", "text/html", responseData.length(), "close");
         outputStream.write((responseHeader.toString() + responseData).getBytes());
         outputStream.flush();
-       // outputStream.close();
+        System.out.println(responseData);
+        //outputStream.close();
     }
 
 }
