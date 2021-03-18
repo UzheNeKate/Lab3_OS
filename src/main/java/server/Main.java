@@ -1,4 +1,4 @@
-package server;
+/*package server;
 
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -6,7 +6,7 @@ import java.net.Socket;
 public class Main {
 
     public static void main(String[] args) {
-        ServerSocket serverSocket;
+        ServerSocketChannel serverSocket;
         try {
             serverSocket = new ServerSocket(8080);
             while (!serverSocket.isClosed()) {
@@ -18,4 +18,4 @@ public class Main {
             e.printStackTrace();
         }
     }
-}
+}*/

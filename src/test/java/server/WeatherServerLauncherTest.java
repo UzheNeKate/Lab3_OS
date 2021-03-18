@@ -48,30 +48,36 @@ class WeatherServerLauncherTest {
         int port = 8080;
         System.out.println("Connecting to " + hostname + ":" + port);
         System.out.println();
+        for (int i = 0; i < 10; i++) {
+            var randomRequest = getRandomRequest();
+            System.out.println("Request : " + randomRequest);
 
-        try (Socket socket = new Socket(hostname, port)) {
-            InputStream input = socket.getInputStream();
-            String line;
+            try (Socket socket = new Socket(hostname, port)) {
+                InputStream input = socket.getInputStream();
+                String line;
 
-            OutputStream output = socket.getOutputStream();
-            PrintWriter writer = new PrintWriter(output, true);
-            for (int i = 0; i < 10; i++) {
-                var randomRequest = getRandomRequest();
-                System.out.println("Request : " + randomRequest);
+                OutputStream output = socket.getOutputStream();
+                PrintWriter writer = new PrintWriter(output, true);
                 writer.println("GET /" + randomRequest);
+                BufferedReader reader = new BufferedReader(new InputStreamReader(input));
+                /*while (!(line = reader.readLine()).equals("")) {
+                    System.out.println(line);
+                }*/
+                int k = 0;
+                StringBuilder str = new StringBuilder();
+                while(reader.ready()){
+                    char c = (char)reader.read();
+                    str.insert(k++, c);
+                }
+                String string = str.toString();
+                System.out.println(string);
+                socket.getOutputStream().close();
+                reader.close();
+            } catch (UnknownHostException ex) {
+                System.out.println("Server not found: " + ex.getMessage());
+            } catch (IOException ex) {
+                System.out.println("I/O error: " + ex.getMessage());
             }
-            //socket.getInputStream().close();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(input));
-            while ((line = reader.readLine()) != null) {
-                System.out.println(line);
-            }
-            socket.getOutputStream().close();
-            reader.close();
-
-        } catch (UnknownHostException ex) {
-            System.out.println("Server not found: " + ex.getMessage());
-        } catch (IOException ex) {
-            System.out.println("I/O error: " + ex.getMessage());
         }
     }
 

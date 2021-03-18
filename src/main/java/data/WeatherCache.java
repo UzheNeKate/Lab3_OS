@@ -1,11 +1,17 @@
 package data;
 
+import com.google.gson.Gson;
 import connect.CloudConnector;
 
 import java.lang.reflect.Type;
 import java.net.ConnectException;
+import java.net.http.HttpResponse;
+import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.ExecutionException;
+import java.util.function.Supplier;
 
 public class WeatherCache {
     private final int size;
@@ -32,7 +38,8 @@ public class WeatherCache {
     }
 
     private CachedWeatherInfo update(String key) throws ConnectException {
-        var receivedOptionalInfo = cloudConnector.getFromCloud(key);
+        var future = cloudConnector.getFromCloud(key);
+        var receivedOptionalInfo = parse(future);
 
         if (receivedOptionalInfo.isEmpty()) {
             throw new ConnectException("400 Bad Request");
@@ -48,5 +55,17 @@ public class WeatherCache {
         recordsQueue.add(receivedInfo);
         weatherByCity.put(key, receivedInfo);
         return receivedInfo;
+    }
+    private Optional<CachedWeatherInfo> parse(CompletableFuture<HttpResponse<Supplier<CachedWeatherInfo>>> future){
+        CachedWeatherInfo response = null;
+        try {
+            response = future.get().body().get();
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+            return Optional.empty();
+        }
+        Gson parser = new Gson();
+        System.out.println(parser.toJson(response, CachedWeatherInfo.class));
+        return Optional.of(response);
     }
 }
