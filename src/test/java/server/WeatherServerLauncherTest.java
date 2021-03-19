@@ -54,17 +54,15 @@ class WeatherServerLauncherTest {
 
             try (Socket socket = new Socket(hostname, port)) {
                 InputStream input = socket.getInputStream();
-                String line;
-
                 OutputStream output = socket.getOutputStream();
+
+                BufferedReader reader = new BufferedReader(new InputStreamReader(input));
                 PrintWriter writer = new PrintWriter(output, true);
                 writer.println("GET /" + randomRequest);
-                BufferedReader reader = new BufferedReader(new InputStreamReader(input));
-                /*while (!(line = reader.readLine()).equals("")) {
-                    System.out.println(line);
-                }*/
+
                 int k = 0;
                 StringBuilder str = new StringBuilder();
+
                 while(reader.ready()){
                     char c = (char)reader.read();
                     str.insert(k++, c);
@@ -72,7 +70,7 @@ class WeatherServerLauncherTest {
                 String string = str.toString();
                 System.out.println(string);
                 socket.getOutputStream().close();
-                reader.close();
+              //  reader.close();
             } catch (UnknownHostException ex) {
                 System.out.println("Server not found: " + ex.getMessage());
             } catch (IOException ex) {
