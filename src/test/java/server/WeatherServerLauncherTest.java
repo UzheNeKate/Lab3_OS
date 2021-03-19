@@ -2,7 +2,6 @@ package server;
 
 import com.google.gson.Gson;
 import data.HumidityRequestInfo;
-import data.Request;
 import org.junit.jupiter.api.Test;
 
 import java.io.*;
@@ -31,7 +30,7 @@ class WeatherServerLauncherTest {
         Arrays.stream(parts).forEach(System.out::println);
     }
 
-    static String[] requests = {"weather", "temperature", "humidity", "wrong"};
+    static String[] requests = {"temperature", "humidity", "wrong"};
 
     static String[] cities = {"Minsk", "New York", "Brest", "Moscow", "London", "Warsaw",
             "Kiev", "Moscow", "Berlin", "Rome", "Paris"};
@@ -54,24 +53,21 @@ class WeatherServerLauncherTest {
 
             try (Socket socket = new Socket(hostname, port)) {
                 InputStream input = socket.getInputStream();
-                String line;
-
                 OutputStream output = socket.getOutputStream();
+
+                BufferedReader reader = new BufferedReader(new InputStreamReader(input));
                 PrintWriter writer = new PrintWriter(output, true);
                 writer.println("GET /" + randomRequest);
-                BufferedReader reader = new BufferedReader(new InputStreamReader(input));
-                while (!reader.ready()) {
 
-                }
                 int k = 0;
                 StringBuilder str = new StringBuilder();
-                while(reader.ready()){
-                    char c = (char)reader.read();
-                    str.insert(k++, c);
+                BufferedReader in =
+                        new BufferedReader(
+                                new InputStreamReader(socket.getInputStream()));
+                String line;
+                while (! (line = in.readLine()).equals("")) {
+                    System.out.println(line);
                 }
-                String string = str.toString();
-                System.out.println(string);
-                socket.getOutputStream().close();
                 reader.close();
             } catch (UnknownHostException ex) {
                 System.out.println("Server not found: " + ex.getMessage());
@@ -80,5 +76,4 @@ class WeatherServerLauncherTest {
             }
         }
     }
-
 }

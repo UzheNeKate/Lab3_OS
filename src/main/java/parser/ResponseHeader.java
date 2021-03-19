@@ -26,7 +26,6 @@ public class ResponseHeader {
             Content-Type: %s\r
             Content-Length: %d\r
             Connection: %s\r
-            \r
             """, httpStandard, httpCode, serverName, contentType, contentLength, connection);
     }
 }
