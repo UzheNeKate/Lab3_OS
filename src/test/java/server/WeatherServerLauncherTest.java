@@ -2,7 +2,6 @@ package server;
 
 import com.google.gson.Gson;
 import data.HumidityRequestInfo;
-import data.Request;
 import org.junit.jupiter.api.Test;
 
 import java.io.*;
@@ -31,7 +30,7 @@ class WeatherServerLauncherTest {
         Arrays.stream(parts).forEach(System.out::println);
     }
 
-    static String[] requests = {"weather", "temperature", "humidity", "wrong"};
+    static String[] requests = {"temperature", "humidity", "wrong"};
 
     static String[] cities = {"Minsk", "New York", "Brest", "Moscow", "London", "Warsaw",
             "Kiev", "Moscow", "Berlin", "Rome", "Paris"};
@@ -62,7 +61,19 @@ class WeatherServerLauncherTest {
 
                 int k = 0;
                 StringBuilder str = new StringBuilder();
+                BufferedReader in =
+                        new BufferedReader(
+                                new InputStreamReader(socket.getInputStream()));
+                String line;
+                while (! (line = in.readLine()).equals("")) {
+                    System.out.println(line);
+                }
+/*
 
+                while(!reader.ready()){
+                    //System.out.println("Waiting for the summer");
+                    //empty loop
+                }
                 while(reader.ready()){
                     char c = (char)reader.read();
                     str.insert(k++, c);
@@ -70,7 +81,8 @@ class WeatherServerLauncherTest {
                 String string = str.toString();
                 System.out.println(string);
                 socket.getOutputStream().close();
-              //  reader.close();
+*/
+                reader.close();
             } catch (UnknownHostException ex) {
                 System.out.println("Server not found: " + ex.getMessage());
             } catch (IOException ex) {
@@ -78,5 +90,4 @@ class WeatherServerLauncherTest {
             }
         }
     }
-
 }

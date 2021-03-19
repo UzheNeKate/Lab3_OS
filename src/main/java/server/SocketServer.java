@@ -63,7 +63,8 @@ public class SocketServer implements Runnable {
     private void writeResponse(String responseData, int httpCode) throws Throwable {
         var responseHeader = new ResponseHeader("HTTP/1.1", httpCode,
                 "WeatherServer", "text/html", responseData.length(), "close");
-        outputStream.write((responseHeader + responseData).getBytes(StandardCharsets.UTF_8));
+        outputStream.write((responseHeader + responseData + "\r\n\r").getBytes(StandardCharsets.UTF_8));
+       // outputStream.close();
         System.out.println(responseData);
     }
 
