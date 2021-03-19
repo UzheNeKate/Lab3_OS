@@ -1,11 +1,11 @@
 package data;
 
-public class HumidityRequestInfo extends AbstractWeatherInfo {
-    Humidity current;
+import lombok.Getter;
 
-    public Humidity getHumidity() {
-        return current;
-    }
+public class HumidityRequestInfo extends AbstractWeatherInfo {
+
+    @Getter
+    Humidity current;
 
     public HumidityRequestInfo(CachedWeatherInfo cachedWeatherInfo) {
         this.current = new Humidity(cachedWeatherInfo.current);

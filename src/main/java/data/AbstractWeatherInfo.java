@@ -1,20 +1,18 @@
 package data;
 
+import lombok.Getter;
+import lombok.Setter;
+
 public abstract class AbstractWeatherInfo {
+
+    @Getter
     Location location;
-    boolean fromCache = false;
 
-    public Location getLocation() {
-        return location;
-    }
-
-    public boolean getFromCache() {
-        return fromCache;
-    }
+    @Setter
+    @Getter
+    Boolean fromCache = false;
 
     public void setWrittenToCache() {
         fromCache = true;
     }
-
-
 }

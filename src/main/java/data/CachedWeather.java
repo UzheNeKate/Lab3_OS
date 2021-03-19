@@ -1,29 +1,16 @@
 package data;
 
+import lombok.Getter;
+
 public class CachedWeather extends AbstractWeather {
+    @Getter
     int temperature;
+    @Getter
     int feelslike;
+    @Getter
     int visibility;
+    @Getter
     int wind_speed;
+    @Getter
     int humidity;
-
-    public int getTemperature() {
-        return temperature;
-    }
-
-    public int getFeelsLike() {
-        return feelslike;
-    }
-
-    public int getVisibility() {
-        return visibility;
-    }
-
-    public int getWindSpeed() {
-        return wind_speed;
-    }
-
-    public int getHumidity() {
-        return humidity;
-    }
 }

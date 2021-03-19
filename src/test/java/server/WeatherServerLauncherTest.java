@@ -60,9 +60,9 @@ class WeatherServerLauncherTest {
                 PrintWriter writer = new PrintWriter(output, true);
                 writer.println("GET /" + randomRequest);
                 BufferedReader reader = new BufferedReader(new InputStreamReader(input));
-                /*while (!(line = reader.readLine()).equals("")) {
-                    System.out.println(line);
-                }*/
+                while (!reader.ready()) {
+
+                }
                 int k = 0;
                 StringBuilder str = new StringBuilder();
                 while(reader.ready()){

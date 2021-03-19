@@ -1,9 +1,8 @@
 package data;
 
-public abstract class AbstractWeather {
-    String observation_time;
+import lombok.Getter;
 
-    public String getObservationTime() {
-        return observation_time;
-    }
+public abstract class AbstractWeather {
+    @Getter
+    String observation_time;
 }

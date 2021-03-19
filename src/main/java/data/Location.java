@@ -1,16 +1,12 @@
 package data;
 
+import lombok.Getter;
+
 public class Location {
+    @Getter
     String name;
+    @Getter
     String country;
-
-    public String getName() {
-        return name;
-    }
-
-    public String getCountry() {
-        return country;
-    }
 
     public Location(Location location){
         this.name = location.getName();

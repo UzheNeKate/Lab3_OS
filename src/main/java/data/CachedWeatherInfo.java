@@ -1,9 +1,9 @@
 package data;
 
-public class CachedWeatherInfo extends AbstractWeatherInfo{
-    CachedWeather current;
+import lombok.Getter;
 
-    public AbstractWeather getCachedWeather() {
-        return current;
-    }
+public class CachedWeatherInfo extends AbstractWeatherInfo{
+
+    @Getter
+    CachedWeather current;
 }

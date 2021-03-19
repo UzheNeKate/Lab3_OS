@@ -1,11 +1,10 @@
 package data;
 
-public class TemperatureRequestInfo extends AbstractWeatherInfo {
-    Temperature current;
+import lombok.Getter;
 
-    public Temperature getTemperature() {
-        return current;
-    }
+public class TemperatureRequestInfo extends AbstractWeatherInfo {
+    @Getter
+    Temperature current;
 
     public TemperatureRequestInfo(CachedWeatherInfo cachedWeatherInfo) {
         this.current = new Temperature(cachedWeatherInfo.current);
