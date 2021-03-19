@@ -68,20 +68,6 @@ class WeatherServerLauncherTest {
                 while (! (line = in.readLine()).equals("")) {
                     System.out.println(line);
                 }
-/*
-
-                while(!reader.ready()){
-                    //System.out.println("Waiting for the summer");
-                    //empty loop
-                }
-                while(reader.ready()){
-                    char c = (char)reader.read();
-                    str.insert(k++, c);
-                }
-                String string = str.toString();
-                System.out.println(string);
-                socket.getOutputStream().close();
-*/
                 reader.close();
             } catch (UnknownHostException ex) {
                 System.out.println("Server not found: " + ex.getMessage());
