@@ -57,7 +57,7 @@ public class WeatherCache {
         return receivedInfo;
     }
     private Optional<CachedWeatherInfo> parse(CompletableFuture<HttpResponse<Supplier<CachedWeatherInfo>>> future){
-        CachedWeatherInfo response = null;
+        CachedWeatherInfo response;
         try {
             response = future.get().body().get();
         } catch (InterruptedException | ExecutionException e) {
