@@ -12,7 +12,6 @@ import java.net.ConnectException;
 @RestController
 @RequestMapping("/humidity")
 public class HumidityRequestHandler implements RequestHandler {
-
     static WeatherCache cache = new WeatherCache(HumidityRequestInfo.class, 5);
 
     @Override

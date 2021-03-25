@@ -6,26 +6,24 @@ public class ResponseHeader {
     String serverName;
     String contentType;
     int contentLength;
-    String connection;
 
     public ResponseHeader(String httpStandard, int httpCode, String serverName,
-                          String contentType, int contentLength, String connection) {
+                          String contentType, int contentLength) {
         this.httpStandard = httpStandard;
         this.httpCode = httpCode;
         this.serverName = serverName;
         this.contentType = contentType;
         this.contentLength = contentLength;
-        this.connection = connection;
     }
 
     @Override
     public String toString() {
         return String.format("""
-            %s %d\r
-            Server: %s\r
-            Content-Type: %s\r
-            Content-Length: %d\r
-            Connection: %s\r
-            """, httpStandard, httpCode, serverName, contentType, contentLength, connection);
+                %s %d\r
+                Server: %s\r          
+                Content-Type: %s; charset=utf-8\r
+                Content-Length: %d\r
+                        
+                """, httpStandard, httpCode, serverName, contentType, contentLength);
     }
 }

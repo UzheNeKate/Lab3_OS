@@ -1,30 +1,22 @@
 package server;
 
-import com.google.gson.Gson;
-import data.HumidityRequestInfo;
 import org.junit.jupiter.api.Test;
 
-import java.io.*;
+import java.io.IOException;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.util.Arrays;
+import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Random;
 
 class WeatherServerLauncherTest {
-    @Test
-    void parseWeatherMinsk(){
-        var part = "/weather?city=Minsk";
-        var parts = part.split("[/?=&]");
-        System.out.println(parts.length);
-        Arrays.stream(parts).forEach(System.out::println);
-    }
-
     static String[] requests = {"temperature", "humidity", "wrong"};
 
     static String[] cities = {"Minsk", "New York", "Brest", "Moscow", "London", "Warsaw",
             "Kiev", "Moscow", "Berlin", "Rome", "Paris"};
 
-    static String getRandomRequest(){
+    static String getRandomRequest() {
         Random rnd = new Random();
         return String.format("%s?city=%s", requests[rnd.nextInt(requests.length)],
                 cities[rnd.nextInt(cities.length)]);
@@ -39,25 +31,21 @@ class WeatherServerLauncherTest {
         for (int i = 0; i < 10; i++) {
             var randomRequest = getRandomRequest();
             System.out.println("Request : " + randomRequest);
+            try (var socket = new Socket(hostname, port)) {
+                ByteBuffer buffer = ByteBuffer.wrap(("GET /" + randomRequest).getBytes(StandardCharsets.UTF_8));
+                socket.getOutputStream().write(buffer.array());
 
-            try (Socket socket = new Socket(hostname, port)) {
-                InputStream input = socket.getInputStream();
-                OutputStream output = socket.getOutputStream();
-
-                BufferedReader reader = new BufferedReader(new InputStreamReader(input));
-                PrintWriter writer = new PrintWriter(output, true);
-                writer.println("GET /" + randomRequest);
-
-                int k = 0;
-                StringBuilder str = new StringBuilder();
-                BufferedReader in =
-                        new BufferedReader(
-                                new InputStreamReader(socket.getInputStream()));
-                String line;
-                while (! (line = in.readLine()).equals("")) {
-                    System.out.println(line);
+                ArrayList<Byte> bytes = new ArrayList<>();
+                byte anotherByte;
+                while ((anotherByte = (byte) socket.getInputStream().read()) != -1) {
+                    bytes.add(anotherByte);
                 }
-                reader.close();
+
+                var byteArray = new byte[bytes.size()];
+                for (int j = 0; j < bytes.size(); j++) {
+                    byteArray[j] = bytes.get(j);
+                }
+                System.out.println(new String(byteArray, StandardCharsets.UTF_8));
             } catch (UnknownHostException ex) {
                 System.out.println("Server not found: " + ex.getMessage());
             } catch (IOException ex) {

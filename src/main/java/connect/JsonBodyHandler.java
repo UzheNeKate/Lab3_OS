@@ -18,25 +18,23 @@ public class JsonBodyHandler<T> implements HttpResponse.BodyHandler<Supplier<T>>
 
     @Override
     public HttpResponse.BodySubscriber<Supplier<T>> apply(HttpResponse.ResponseInfo responseInfo) {
-        return asJson(this.targetClass);
+        return toJsonSubscriber(this.targetClass);
     }
 
 
-    public static <W> HttpResponse.BodySubscriber<Supplier<W>> asJson(Class<W> targetType) {
+    public static <W> HttpResponse.BodySubscriber<Supplier<W>> toJsonSubscriber(Class<W> targetType) {
         HttpResponse.BodySubscriber<InputStream> upstream = HttpResponse.BodySubscribers.ofInputStream();
-
         return HttpResponse.BodySubscribers.mapping(
                 upstream,
-                inputStream -> toSupplier(inputStream, targetType)
+                inputStream -> toJsonSupplier(inputStream, targetType)
         );
     }
 
-    public static <W> Supplier<W> toSupplier(InputStream inputStream, Class<W> targetType) {
+    public static <W> Supplier<W> toJsonSupplier(InputStream inputStream, Class<W> targetType) {
         return () -> {
             try (InputStream stream = inputStream) {
                 var responseString = new String(stream.readAllBytes(), StandardCharsets.UTF_8);
-                var response = new Gson().fromJson(responseString, targetType);
-                return response;
+                return new Gson().fromJson(responseString, targetType);
             } catch (IOException e) {
                 throw new UncheckedIOException(e);
             }
