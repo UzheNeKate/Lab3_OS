@@ -28,7 +28,7 @@ class WeatherServerLauncherTest {
         int port = 8080;
         System.out.println("Connecting to " + hostname + ":" + port);
         System.out.println();
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 100; i++) {
             var randomRequest = getRandomRequest();
             System.out.println("Request : " + randomRequest);
             try (var socket = new Socket(hostname, port)) {

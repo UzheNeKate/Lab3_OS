@@ -42,10 +42,10 @@ public class SocketServer implements Runnable {
         RequestDistributor distributor = new RequestDistributor();
 
         var handler = distributor.findHandler(parsed);
-        if (handler == null) {
+        if (handler.isEmpty()) {
             writeResponse(new Gson().toJson(BAD_REQUEST, Request.class), 400);
         } else {
-            writeResponse(pool.submit(handler).get(), 200);
+            writeResponse(pool.submit(handler.get()).get(), 200);
         }
     }
 
